@@ -298,10 +298,10 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .svgw.compact{overflow-x:hidden;padding:4px}
 
 /* ── PATH ANIMATION ── */
-.path-anim{animation:drawPath .8s ease-out forwards}
+.path-anim{animation:drawPath .7s ease-out forwards}
 @keyframes drawPath{from{stroke-dashoffset:2000}to{stroke-dashoffset:0}}
 #mainSvg{transition:opacity .15s ease-out}
-#mainSvg.transitioning{opacity:.3}
+#mainSvg.transitioning{opacity:.3;transition:opacity .1s}
 
 /* ── FULLSCREEN ── */
 .svgw:fullscreen,.svgw:-webkit-full-screen{background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden}
@@ -801,7 +801,7 @@ function renderSVG(){
     var dash=locked[idx]&&act?'8 4':'none';
     var pathEl=el('path',{d:d,fill:'none',stroke:col,'stroke-width':act?3:.6,opacity:act?.95:.04,
       'stroke-dasharray':dash,'stroke-linecap':'round','stroke-linejoin':'round','pointer-events':'none'});
-    if(animatePaths&&act){pathEl.setAttribute('stroke-dasharray','2000');pathEl.setAttribute('stroke-dashoffset','2000');pathEl.classList.add('path-anim');pathEl.style.animationDelay=(idx*0.08)+'s'}
+    if(animatePaths&&act){pathEl.setAttribute('stroke-dasharray','2000');pathEl.setAttribute('stroke-dashoffset','2000');pathEl.classList.add('path-anim');pathEl.style.animationDelay=(idx*0.02)+'s'}
     svg.appendChild(pathEl);
     if(act&&highlight.has(idx)){
       svg.appendChild(el('path',{d:d,fill:'none',stroke:col,'stroke-width':5,opacity:.35,
@@ -939,9 +939,20 @@ function buildCtrlPanel(){
     lk.style.borderColor=locked[i]?col:'#475569';
     lk.dataset.i=i;
     lk.addEventListener('click',function(e){
-      e.stopPropagation();toggleLock(+this.dataset.i);
-      // Don't recompute routes - just update visuals (lock state only)
-      renderStatus();renderSVG();buildCtrlPanel();
+      e.stopPropagation();
+      var idx=+this.dataset.i;
+      toggleLock(idx);
+      // Immediately update this button visually
+      var isLocked=locked[idx];
+      var c=COLORS[idx];
+      this.textContent=isLocked?'🔒':'🔓';
+      this.className='ctrl-lk'+(isLocked?' on':'');
+      this.style.color=isLocked?c:'#475569';
+      this.style.borderColor=isLocked?c:'#475569';
+      // Then full update
+      renderStatus();renderSVG();
+      // Defer panel rebuild to avoid DOM conflict
+      setTimeout(function(){buildCtrlPanel()},50);
     });
     row3.appendChild(lk);
   }
@@ -1183,8 +1194,8 @@ function renderPresets(){var bar=document.getElementById('presetsBar');
         for(var i=0;i<N;i++){if(locked[i]&&routes[i])frozenRoutes[i]=routes[i]}
         renderSVG();buildCtrlPanel();
         svg.classList.remove('transitioning');
-        setTimeout(function(){animatePaths=false;renderSVG()},1000);
-      },150)});bar.appendChild(b)})}
+        setTimeout(function(){animatePaths=false;renderSVG()},600);
+      },100)});bar.appendChild(b)})}
 function showMsg(t,txt){var e=document.getElementById('rerouteMsg');
   if(t==='success')e.innerHTML='<span class="rmsg" style="color:var(--green);background:rgba(74,222,128,.06);border-color:rgba(74,222,128,.2)">'+txt+'</span>';
   else if(t==='warn')e.innerHTML='<span class="rmsg" style="color:var(--red);background:rgba(248,113,113,.06);border-color:rgba(248,113,113,.2)">'+txt+'</span>';else e.innerHTML=''}
@@ -1222,7 +1233,7 @@ function handleReroute(){var hl=false;for(var i=0;i<N;i++)if(locked[i])hl=true;i
 function handleForceReroute(){locked=Array(N).fill(false);frozenRoutes=Array(N).fill(null);closeModal();render()}
 function closeModal(){document.getElementById('modal').classList.remove('show')}
 function render(){compute();renderStatus();renderSVG();simMonitor();document.getElementById('rerouteMsg').innerHTML=''}
-renderPresets();animatePaths=true;render();setTimeout(function(){animatePaths=false;renderSVG()},1000);
+renderPresets();animatePaths=true;render();setTimeout(function(){animatePaths=false;renderSVG()},600);
 // Tap on empty SVG background to deselect
 document.getElementById('mainSvg').addEventListener('click',function(e){
   if(e.target===document.getElementById('mainSvg')&&highlight.size>0){highlight=new Set();renderSVG()}
@@ -1293,8 +1304,8 @@ document.addEventListener('keydown',function(e){
       for(var i=0;i<N;i++){if(locked[i]&&routes[i])frozenRoutes[i]=routes[i]}
       renderSVG();buildCtrlPanel();
       svg.classList.remove('transitioning');
-      setTimeout(function(){animatePaths=false;renderSVG()},1000);showToast('⌨ '+pr.n);
-    },150);return}
+      setTimeout(function(){animatePaths=false;renderSVG()},600);showToast('⌨ '+pr.n);
+    },100);return}
   if(k==='l'){e.preventDefault();for(var i=0;i<N;i++){if(routes[i]&&!locked[i]){locked[i]=true;frozenRoutes[i]=routes[i]}}render();showToast('🔒 All locked');return}
   if(k==='u'){e.preventDefault();locked=Array(N).fill(false);frozenRoutes=Array(N).fill(null);render();showToast('🔓 All unlocked');return}
   if(k==='f'){e.preventDefault();toggleCompact();showToast(compactMode?'⛶ Fit on':'⛶ Fit off');return}
