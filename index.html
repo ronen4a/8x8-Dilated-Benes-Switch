@@ -423,7 +423,7 @@ html,body{overscroll-behavior:none}
   <div class="sbar" id="statusBar"></div>
   <span id="rerouteMsg" style="display:none"></span>
   <div class="cbar">
-    <div class="cbar-section" id="presetsBar"><span class="cbar-lbl">PRESETS</span></div>
+    <div class="cbar-section" id="presetsBar"></div>
   </div>
   <div class="ftbar">
     <button class="ftbtn on" onclick="openFocus()" style="border-color:var(--purple);color:var(--purple)">Network View</button>
@@ -587,15 +587,15 @@ function bezD(x1,y1,x2,y2){var d=(x2-x1)*.42;return'M'+x1+','+y1+' C'+(x1+d)+','
 
 function drawSubnetBlocks(svg){var oP=20,iP=12;
   var mob=window.innerWidth<=768;
-  var bsw=mob?2.2:1.2;  // outer block stroke
-  var bso=mob?.35:.18;   // outer stroke opacity
-  var bfo=mob?.1:.06;    // outer fill opacity
-  var isw=mob?1.8:1;     // inner block stroke
-  var iso=mob?.4:.25;    // inner stroke opacity
-  var ifo=mob?.12:.08;   // inner fill opacity
-  var lop=mob?.85:.55;   // label opacity
-  var lsz=mob?11:9;      // label font size
-  var lsz2=mob?10:8;     // small label font size
+  var bsw=mob?3.5:1.2;  // outer block stroke
+  var bso=mob?.55:.18;   // outer stroke opacity
+  var bfo=mob?.15:.06;   // outer fill opacity
+  var isw=mob?2.5:1;     // inner block stroke
+  var iso=mob?.55:.25;    // inner stroke opacity
+  var ifo=mob?.15:.08;    // inner fill opacity
+  var lop=mob?1:.55;    // label opacity
+  var lsz=mob?13:9;      // label font size
+  var lsz2=mob?11:8;     // small label font size
   function blk(r1,r2,s1,s2,f,fo,st,so,sw){var y1=SWY[r1]-SW_H/2-oP,y2=SWY[r2]+SW_H/2+oP,x1=STAGE_X[s1]-oP,x2=STAGE_X[s2]+SW_W+oP;
     svg.appendChild(el('rect',{x:x1,y:y1,width:x2-x1,height:y2-y1,rx:12,fill:f,opacity:fo,stroke:st,'stroke-width':sw,'stroke-opacity':so}))}
   function iblk(r1,r2,s1,s2,f,fo,st,so,sw){var y1=SWY[r1]-SW_H/2-iP,y2=SWY[r2]+SW_H/2+iP,x1=STAGE_X[s1]-iP,x2=STAGE_X[s2]+SW_W+iP;
