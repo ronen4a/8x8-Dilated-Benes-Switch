@@ -78,7 +78,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .pbtn:hover,.pbtn:active{background:var(--card);color:var(--text);border-color:var(--dim);transform:translateY(-1px)}
 .pbtn:active{transform:translateY(0)}
 
-.rbtn{padding:8px 20px;border-radius:var(--radius-xs);font-size:11px;font-weight:700;font-family:inherit;
+.rbtn{padding:5px 20px;border-radius:var(--radius-xs);font-size:11px;font-weight:700;font-family:inherit;
   cursor:pointer;border:none;letter-spacing:.04em;transition:all .25s;touch-action:manipulation;white-space:nowrap}
 .rbtn.on{background:linear-gradient(135deg,var(--orange),var(--red));color:var(--bg);
   box-shadow:0 4px 24px rgba(248,113,113,.3),0 0 0 1px rgba(248,113,113,.15)}
@@ -95,7 +95,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .helpbox.show{display:block}
 
 /* ── FEATURE TOGGLES ── */
-.ftbar{display:flex;justify-content:center;gap:6px;margin-bottom:12px;flex-wrap:nowrap;padding:0 4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ftbar{display:flex;justify-content:center;gap:6px;margin-bottom:12px;flex-wrap:wrap;padding:0 4px}
 .ftbar::-webkit-scrollbar{display:none}
 .ftbtn{padding:5px 10px;border-radius:var(--radius-xs);font-size:9px;font-weight:700;font-family:inherit;
   cursor:pointer;letter-spacing:.03em;border:1px solid var(--border);background:var(--surface);color:var(--dim);
@@ -218,14 +218,22 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   .dash{padding:12px 4px 28px}
   .header{margin-bottom:12px;padding:6px 0 16px}
   
-  /* Stack control bar vertically */
+  /* Stack control bar vertically, full width */
   .cbar{gap:6px;flex-direction:column;align-items:stretch}
-  .cbar-section{padding:6px 10px;justify-content:center}
-  #presetsBar{width:100%;gap:5px}
+  .cbar-section{padding:6px 10px;justify-content:center;flex-wrap:wrap}
+  #presetsBar{width:100%;gap:4px}
+  #presetsBar .pbtn{flex:1;text-align:center;padding:6px 4px}
+  .cbar-section .rbtn{flex:1}
+  .cbar-section .helpbtn{flex:0}
+  .cbar-section .ftbtn{flex:1;text-align:center}
   
-  /* Feature toggles: single row, scroll if needed */
-  .ftbar{gap:4px;padding:0 2px;justify-content:flex-start}
-  .ftbtn{padding:5px 8px;font-size:8px;gap:3px}
+  /* Feature toggles: stretch to fill */
+  .ftbar{gap:4px;padding:0 2px;justify-content:stretch}
+  .ftbtn{flex:1;padding:5px 4px;font-size:8px;gap:3px;text-align:center;white-space:nowrap}
+
+  /* Status bar pills stretch */
+  .sbar{gap:4px;padding:0 2px}
+  .pill{flex:1;justify-content:center;padding:6px 6px;font-size:10px}
 
   /* SVG needs scroll */
   .scroll-hint{display:block}
@@ -252,10 +260,10 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 /* Small phones */
 @media(max-width:380px){
   .dash{padding:8px 2px 24px}
-  .pill{padding:5px 10px;font-size:10px}
-  .pbtn{padding:5px 8px;font-size:10px}
-  .ftbtn{padding:4px 6px;font-size:7px}
-  .cbar-section{padding:5px 8px}
+  .pill{padding:4px 4px;font-size:9px}
+  .pbtn{padding:5px 4px;font-size:9px}
+  .ftbtn{padding:4px 3px;font-size:7px}
+  .cbar-section{padding:5px 6px}
 }
 
 /* Tablets */
@@ -419,10 +427,9 @@ html,body{overscroll-behavior:none}
   <div class="sbar" id="statusBar"></div>
   <div class="cbar">
     <div class="cbar-section" id="presetsBar"><span class="cbar-lbl">PRESETS</span></div>
-    <div class="cbar-section"><button class="rbtn off" id="rerouteBtn" onclick="handleReroute()">LOCK PATHS FIRST</button><span id="rerouteMsg"></span><button class="helpbtn" onclick="document.getElementById('helpBox').classList.toggle('show')">ⓘ Help</button></div>
+    <div class="cbar-section"><span id="rerouteMsg"></span></div>
     <div class="cbar-section"><button class="ftbtn on" onclick="openFocus()" style="border-color:var(--purple);color:var(--purple)"><span class="fdot" style="background:var(--purple)"></span>Network View</button><button class="ftbtn" id="compactBtn" onclick="toggleCompact()"><span class="fdot"></span>Fit Screen</button><button class="ftbtn" onclick="goFullscreen()"><span class="fdot"></span>Fullscreen</button></div>
   </div>
-  <div class="helpbox" id="helpBox">🔒 Click the <b>first box</b> to lock/unlock · Click the <b>second box</b> to select output · <b>⚡ Reroute</b> reroutes unlocked around locked</div>
   <div class="ftbar">
     <button class="ftbtn on" onclick="toggleFeature('loss',this)"><span class="fdot"></span>Insertion Loss</button>
     <button class="ftbtn" onclick="toggleFeature('photon',this)"><span class="fdot"></span>Photon Flow</button>
@@ -807,19 +814,27 @@ function renderSVG(){
     svg.appendChild(el('text',{x:lx+21,y:ly,'text-anchor':'middle',fill:lc,'font-size':8,'font-family':'inherit','font-weight':700,opacity:act?.9:.08,text:'-'+loss.toFixed(1)+' dB'}))}}
 
   for(var idx=0;idx<N;idx++){if(pathData[idx])continue;var y=yTop(idx),act=isHL(idx);
-    var g=el('g',{opacity:act?.9:.2});g.appendChild(el('line',{x1:110,y1:y,x2:STAGE_X[1],y2:y,stroke:'#f87171','stroke-width':1.8,'stroke-dasharray':'6 4'}));
-    var bx=STAGE_X[0]+SW_W+20;g.appendChild(el('rect',{x:bx,y:y-10,width:68,height:18,rx:5,fill:'#f8717118',stroke:'#f87171','stroke-width':.8}));
-    g.appendChild(el('text',{x:bx+34,y:y+2.5,'text-anchor':'middle',fill:'#f87171','font-size':9,'font-family':'inherit','font-weight':700,text:'NO ROUTE'}));svg.appendChild(g)}
+    var g=el('g',{opacity:act?.9:.2});
+    g.appendChild(el('line',{x1:110,y1:y,x2:STAGE_X[5]+SW_W,y2:y,stroke:'#f87171','stroke-width':1.8,'stroke-dasharray':'6 4',opacity:.6}));
+    var bx=STAGE_X[2];
+    g.appendChild(el('rect',{x:bx,y:y-12,width:80,height:24,rx:6,fill:'#f8717130',stroke:'#f87171','stroke-width':1}));
+    g.appendChild(el('text',{x:bx+40,y:y+3,'text-anchor':'middle',fill:'#f87171','font-size':10,'font-family':'inherit','font-weight':700,text:'✗ FAILED'}));
+    svg.appendChild(g)}
 
   drawSwitches(svg,'gl','sg');
 
   var SQ=24;
   for(var i=0;i<N;i++){var y=SWY[i],act=isHL(i);
     var col=COLORS[i];
+    var routed=!!routes[i];
+    var statusCol=routed?'#4ade80':'#f87171';
+    var statusTxt=routed?'✓':'✗';
     var g=el('g',{style:'cursor:pointer',opacity:act?1:.18});
-    g.appendChild(el('rect',{x:60,y:y-20,width:44,height:40,fill:'transparent',style:'cursor:pointer'}));
+    g.appendChild(el('rect',{x:56,y:y-20,width:52,height:40,fill:'transparent',style:'cursor:pointer'}));
     g.appendChild(el('rect',{x:68,y:y-SQ/2,width:SQ+8,height:SQ,rx:3,fill:col+'15',stroke:col+'45','stroke-width':.8}));
     g.appendChild(el('text',{x:84,y:y+5,'text-anchor':'middle',fill:col,'font-size':13,'font-family':'inherit','font-weight':700,text:''+i}));
+    // Status ✓/✗
+    g.appendChild(el('text',{x:62,y:y+4,'text-anchor':'middle',fill:statusCol,'font-size':10,'font-weight':700,text:statusTxt}));
     (function(v){
       g.addEventListener('click',function(){toggleHL(v);renderSVG()});
     })(i);svg.appendChild(g)}
@@ -894,9 +909,15 @@ function buildCtrlPanel(){
     sel.style.color=col;sel.style.borderColor=col+'80';
     sel.style.background=col+'10';
     sel.disabled=locked[i];
+    // Find which outputs are taken by locked channels
+    var lockedOuts=[];
+    for(var li=0;li<N;li++){if(locked[li]&&li!==i)lockedOuts.push(perm[li])}
     for(var j=0;j<N;j++){
       var opt=document.createElement('option');opt.value=j;
-      opt.textContent='→'+j;
+      var isLockedOut=lockedOuts.indexOf(j)!==-1;
+      opt.textContent=isLockedOut?'→'+j+' 🔒':'→'+j;
+      opt.disabled=isLockedOut;
+      if(isLockedOut)opt.style.color='#475569';
       if(perm[i]===j)opt.selected=true;
       sel.appendChild(opt);
     }
@@ -918,7 +939,9 @@ function buildCtrlPanel(){
     lk.style.borderColor=locked[i]?col:'#475569';
     lk.dataset.i=i;
     lk.addEventListener('click',function(e){
-      e.stopPropagation();toggleLock(+this.dataset.i);render();
+      e.stopPropagation();toggleLock(+this.dataset.i);
+      // Don't recompute routes - just update visuals (lock state only)
+      renderStatus();renderSVG();buildCtrlPanel();
     });
     row3.appendChild(lk);
   }
@@ -1112,29 +1135,85 @@ function renderMonitor(){var grid=document.getElementById('monGrid');grid.innerH
 // ═══════════════════════════════════════════════════════════════════
 function renderStatus(){var rc=0,ac=0,lc=0;for(var i=0;i<N;i++){if(routes[i])rc++;if(locked[i])lc++}for(var k in switchUsage)ac++;var ok=rc===N;
   document.getElementById('statusBar').innerHTML='<div class="pill" style="border-color:'+(ok?'var(--green)':'var(--red)')+';color:'+(ok?'var(--green)':'var(--red)')+'"><span class="dot" style="background:'+(ok?'var(--green)':'var(--red)')+'"></span>'+rc+'/'+N+' ROUTED '+(ok?'✓':'⚠')+'</div><div class="pill" style="border-color:var(--border);color:var(--muted)">Active: '+ac+'/48</div><div class="pill" style="border-color:rgba(250,204,21,.25);color:var(--yellow)">🔒 '+lc+'</div>'}
-function updateRerouteBtn(){var hl=false;for(var i=0;i<N;i++)if(locked[i])hl=true;
-  var btn=document.getElementById('rerouteBtn');btn.className='rbtn '+(hl?'on':'off');btn.textContent=hl?'⚡ REROUTE':'LOCK PATHS FIRST'}
 function renderPresets(){var bar=document.getElementById('presetsBar');
   [{name:'Identity',p:[0,1,2,3,4,5,6,7]},{name:'Reverse',p:[7,6,5,4,3,2,1,0]},{name:'Shift+1',p:[1,2,3,4,5,6,7,0]},{name:'Swap',p:[1,0,3,2,5,4,7,6]},{name:'Interleave',p:[0,4,1,5,2,6,3,7]},{name:'Random',p:null}].forEach(function(pr){
     var b=document.createElement('button');b.className='pbtn';b.textContent=pr.name;
-    b.addEventListener('click',function(){var p=pr.p;if(!p){p=[0,1,2,3,4,5,6,7];for(var i=7;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=p[i];p[i]=p[j];p[j]=t}}
+    b.addEventListener('click',function(){
+      var isRandom=!pr.p;
       var svg=document.getElementById('mainSvg');
       svg.classList.add('transitioning');
       setTimeout(function(){
-        perm=p.slice();locked=Array(N).fill(false);frozenRoutes=Array(N).fill(null);highlight=new Set();
+        // Collect locked info
+        var lockedOutputs=[];var freeInputs=[];var freeOutputs=[];
+        for(var i=0;i<N;i++){
+          if(locked[i]){lockedOutputs.push(perm[i])}
+          else{freeInputs.push(i)}
+        }
+        if(isRandom){
+          // Shuffle free outputs randomly
+          for(var j=0;j<N;j++){if(lockedOutputs.indexOf(j)===-1)freeOutputs.push(j)}
+          for(var i=freeOutputs.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=freeOutputs[i];freeOutputs[i]=freeOutputs[j];freeOutputs[j]=t}
+          for(var k=0;k<freeInputs.length;k++){perm[freeInputs[k]]=freeOutputs[k]}
+        }else{
+          // Apply preset only to unlocked channels
+          var targetPerm=pr.p.slice();
+          // Assign free inputs to their preset outputs, skipping locked outputs
+          var usedOutputs=lockedOutputs.slice();
+          for(var k=0;k<freeInputs.length;k++){
+            var fi=freeInputs[k];
+            var want=targetPerm[fi];
+            if(usedOutputs.indexOf(want)===-1){
+              perm[fi]=want;usedOutputs.push(want);
+            }else{
+              // Wanted output is locked, find next free one from preset order
+              for(var j=0;j<N;j++){
+                var candidate=targetPerm[j];
+                if(usedOutputs.indexOf(candidate)===-1){
+                  perm[fi]=candidate;usedOutputs.push(candidate);break;
+                }
+              }
+            }
+          }
+        }
+        // Keep frozenRoutes for locked channels so compute routes around them
+        // Unlocked channels that can't fit will show ✗ FAILED
+        highlight=new Set();
         animatePaths=true;render();
+        // Re-freeze locked channels with their new routes
+        for(var i=0;i<N;i++){if(locked[i]&&routes[i])frozenRoutes[i]=routes[i]}
+        renderSVG();buildCtrlPanel();
         svg.classList.remove('transitioning');
-        setTimeout(function(){animatePaths=false},1000);
+        setTimeout(function(){animatePaths=false;renderSVG()},1000);
       },150)});bar.appendChild(b)})}
 function showMsg(t,txt){var e=document.getElementById('rerouteMsg');
   if(t==='success')e.innerHTML='<span class="rmsg" style="color:var(--green);background:rgba(74,222,128,.06);border-color:rgba(74,222,128,.2)">'+txt+'</span>';
   else if(t==='warn')e.innerHTML='<span class="rmsg" style="color:var(--red);background:rgba(248,113,113,.06);border-color:rgba(248,113,113,.2)">'+txt+'</span>';else e.innerHTML=''}
-function handlePermChange(i,o){if(locked[i])return;var ex=perm.indexOf(o);if(ex!==-1&&ex!==i){if(locked[ex])return;perm[ex]=perm[i]}perm[i]=o}
-function toggleLock(i){locked[i]=!locked[i];if(locked[i])frozenRoutes[i]=routes[i];else frozenRoutes[i]=null}
+function handlePermChange(i,o){
+  if(locked[i])return;
+  var ex=perm.indexOf(o);
+  if(ex!==-1&&ex!==i){if(locked[ex])return;perm[ex]=perm[i]}
+  perm[i]=o;
+  compute();
+  // Update frozenRoutes for locked channels
+  for(var ch=0;ch<N;ch++){if(locked[ch]&&routes[ch])frozenRoutes[ch]=routes[ch]}
+  renderSVG();buildCtrlPanel();renderStatus();simMonitor();
+}
+function toggleLock(i){
+  locked[i]=!locked[i];
+  if(locked[i]){
+    // Locking: freeze the current route
+    frozenRoutes[i]=routes[i];
+  }else{
+    // Unlocking: clear frozen but DON'T recompute (route stays same until next change)
+    frozenRoutes[i]=null;
+  }
+}
 function handleReroute(){var hl=false;for(var i=0;i<N;i++)if(locked[i])hl=true;if(!hl)return;
   var pre=Array(N).fill(null);for(var i=0;i<N;i++)if(locked[i]&&frozenRoutes[i])pre[i]=frozenRoutes[i];var nr=routeAll(perm,pre);
   if(nr.every(function(r){return r!==null})){routes=nr;pathData=routes.map(function(r,i){return r?trace(i,r):null});
     switchUsage={};pathData.forEach(function(pd,i){if(pd)pd.positions.forEach(function(p){switchUsage[p.stage+'-'+p.sw]=i})});
+    // Update frozenRoutes for locked channels to their new routes
+    for(var i=0;i<N;i++){if(locked[i])frozenRoutes[i]=routes[i]}
     showMsg('success','✓ Rerouted!');renderSVG();renderStatus()}
   else{var fail=[],lks=[];for(var i=0;i<N;i++){if(!nr[i])fail.push(i);if(locked[i])lks.push(i)}
     document.getElementById('failedChips').innerHTML=fail.map(function(s){return'<span class="mchip" style="background:'+COLORS[s]+'25;color:'+COLORS[s]+';border-color:'+COLORS[s]+'50">In'+s+'→'+perm[s]+'</span>'}).join('');
@@ -1142,8 +1221,8 @@ function handleReroute(){var hl=false;for(var i=0;i<N;i++)if(locked[i])hl=true;i
     document.getElementById('modal').classList.add('show')}}
 function handleForceReroute(){locked=Array(N).fill(false);frozenRoutes=Array(N).fill(null);closeModal();render()}
 function closeModal(){document.getElementById('modal').classList.remove('show')}
-function render(){compute();renderStatus();updateRerouteBtn();renderSVG();simMonitor();document.getElementById('rerouteMsg').innerHTML=''}
-renderPresets();animatePaths=true;render();setTimeout(function(){animatePaths=false},1000);
+function render(){compute();renderStatus();renderSVG();simMonitor();document.getElementById('rerouteMsg').innerHTML=''}
+renderPresets();animatePaths=true;render();setTimeout(function(){animatePaths=false;renderSVG()},1000);
 // Tap on empty SVG background to deselect
 document.getElementById('mainSvg').addEventListener('click',function(e){
   if(e.target===document.getElementById('mainSvg')&&highlight.size>0){highlight=new Set();renderSVG()}
@@ -1189,16 +1268,35 @@ document.addEventListener('keydown',function(e){
   if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA')return;
   var k=e.key.toLowerCase();
   if(k>='1'&&k<='6'){e.preventDefault();var pi=parseInt(k)-1,pr=presetKeys[pi];
-    var p=pr.p;if(!p){p=[0,1,2,3,4,5,6,7];for(var i=7;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=p[i];p[i]=p[j];p[j]=t}}
+    var isRandom=!pr.p;
     var svg=document.getElementById('mainSvg');svg.classList.add('transitioning');
     setTimeout(function(){
-      perm=p.slice();locked=Array(N).fill(false);frozenRoutes=Array(N).fill(null);highlight=new Set();
-      animatePaths=true;render();svg.classList.remove('transitioning');
-      setTimeout(function(){animatePaths=false},1000);showToast('⌨ '+pr.n);
+      var isRandom=!pr.p;
+      var lockedOutputs=[];var freeInputs=[];var freeOutputs=[];
+      for(var i=0;i<N;i++){if(locked[i]){lockedOutputs.push(perm[i])}else{freeInputs.push(i)}}
+      if(isRandom){
+        for(var j=0;j<N;j++){if(lockedOutputs.indexOf(j)===-1)freeOutputs.push(j)}
+        for(var i=freeOutputs.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=freeOutputs[i];freeOutputs[i]=freeOutputs[j];freeOutputs[j]=t}
+        for(var k2=0;k2<freeInputs.length;k2++){perm[freeInputs[k2]]=freeOutputs[k2]}
+      }else{
+        var targetPerm=pr.p.slice();
+        var usedOutputs=lockedOutputs.slice();
+        for(var k2=0;k2<freeInputs.length;k2++){
+          var fi=freeInputs[k2];var want=targetPerm[fi];
+          if(usedOutputs.indexOf(want)===-1){perm[fi]=want;usedOutputs.push(want)}
+          else{for(var j=0;j<N;j++){var c=targetPerm[j];if(usedOutputs.indexOf(c)===-1){perm[fi]=c;usedOutputs.push(c);break}}}
+        }
+      }
+      // Keep frozenRoutes for locked channels
+      highlight=new Set();
+      animatePaths=true;render();
+      for(var i=0;i<N;i++){if(locked[i]&&routes[i])frozenRoutes[i]=routes[i]}
+      renderSVG();buildCtrlPanel();
+      svg.classList.remove('transitioning');
+      setTimeout(function(){animatePaths=false;renderSVG()},1000);showToast('⌨ '+pr.n);
     },150);return}
   if(k==='l'){e.preventDefault();for(var i=0;i<N;i++){if(routes[i]&&!locked[i]){locked[i]=true;frozenRoutes[i]=routes[i]}}render();showToast('🔒 All locked');return}
   if(k==='u'){e.preventDefault();locked=Array(N).fill(false);frozenRoutes=Array(N).fill(null);render();showToast('🔓 All unlocked');return}
-  if(k==='r'){e.preventDefault();handleReroute();return}
   if(k==='f'){e.preventDefault();toggleCompact();showToast(compactMode?'⛶ Fit on':'⛶ Fit off');return}
   if(k==='escape'){exitFullscreen();closeFocus();closeModal();return}
 });
