@@ -298,7 +298,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .svgw.compact{overflow-x:hidden;padding:4px}
 
 /* ── PATH ANIMATION ── */
-.path-anim{animation:drawPath .7s ease-out forwards}
+.path-anim{animation:drawPath .5s ease-out forwards}
 @keyframes drawPath{from{stroke-dashoffset:2000}to{stroke-dashoffset:0}}
 #mainSvg{transition:opacity .15s ease-out}
 #mainSvg.transitioning{opacity:.3;transition:opacity .1s}
@@ -586,17 +586,27 @@ function el(tag,a){var e=document.createElementNS(NS,tag);for(var k in a){if(k==
 function bezD(x1,y1,x2,y2){var d=(x2-x1)*.42;return'M'+x1+','+y1+' C'+(x1+d)+','+y1+' '+(x2-d)+','+y2+' '+x2+','+y2}
 
 function drawSubnetBlocks(svg){var oP=20,iP=12;
+  var mob=window.innerWidth<=768;
+  var bsw=mob?2.2:1.2;  // outer block stroke
+  var bso=mob?.35:.18;   // outer stroke opacity
+  var bfo=mob?.1:.06;    // outer fill opacity
+  var isw=mob?1.8:1;     // inner block stroke
+  var iso=mob?.4:.25;    // inner stroke opacity
+  var ifo=mob?.12:.08;   // inner fill opacity
+  var lop=mob?.85:.55;   // label opacity
+  var lsz=mob?11:9;      // label font size
+  var lsz2=mob?10:8;     // small label font size
   function blk(r1,r2,s1,s2,f,fo,st,so,sw){var y1=SWY[r1]-SW_H/2-oP,y2=SWY[r2]+SW_H/2+oP,x1=STAGE_X[s1]-oP,x2=STAGE_X[s2]+SW_W+oP;
     svg.appendChild(el('rect',{x:x1,y:y1,width:x2-x1,height:y2-y1,rx:12,fill:f,opacity:fo,stroke:st,'stroke-width':sw,'stroke-opacity':so}))}
   function iblk(r1,r2,s1,s2,f,fo,st,so,sw){var y1=SWY[r1]-SW_H/2-iP,y2=SWY[r2]+SW_H/2+iP,x1=STAGE_X[s1]-iP,x2=STAGE_X[s2]+SW_W+iP;
     svg.appendChild(el('rect',{x:x1,y:y1,width:x2-x1,height:y2-y1,rx:8,fill:f,opacity:fo,stroke:st,'stroke-width':sw,'stroke-opacity':so}))}
-  function lbl(t,x,y,c,sz){svg.appendChild(el('text',{x:x,y:y,'text-anchor':'start',fill:c,'font-size':sz||9,'font-family':'Outfit,sans-serif','font-weight':700,'letter-spacing':'.08em',opacity:.55,text:t}))}
-  blk(0,3,1,4,'#38bdf8',0.06,'#38bdf8',0.18,1.2);blk(4,7,1,4,'#fb923c',0.06,'#fb923c',0.18,1.2);
+  function lbl(t,x,y,c,sz){svg.appendChild(el('text',{x:x,y:y,'text-anchor':'start',fill:c,'font-size':sz||lsz,'font-family':'Outfit,sans-serif','font-weight':700,'letter-spacing':'.08em',opacity:lop,text:t}))}
+  blk(0,3,1,4,'#38bdf8',bfo,'#38bdf8',bso,bsw);blk(4,7,1,4,'#fb923c',bfo,'#fb923c',bso,bsw);
   lbl('4×4 UPPER',STAGE_X[1]-oP+6,SWY[0]-SW_H/2-oP+12,'#38bdf8');lbl('4×4 LOWER',STAGE_X[1]-oP+6,SWY[4]-SW_H/2-oP+12,'#fb923c');
-  iblk(0,1,2,3,'#4ade80',0.08,'#4ade80',0.25,1);iblk(2,3,2,3,'#facc15',0.08,'#facc15',0.25,1);
-  iblk(4,5,2,3,'#facc15',0.08,'#facc15',0.25,1);iblk(6,7,2,3,'#fb923c',0.08,'#fb923c',0.25,1);
-  var ix=STAGE_X[2]-iP+4;lbl('2×2',ix,SWY[0]-SW_H/2-iP+10,'#4ade80',8);lbl('2×2',ix,SWY[2]-SW_H/2-iP+10,'#facc15',8);
-  lbl('2×2',ix,SWY[4]-SW_H/2-iP+10,'#facc15',8);lbl('2×2',ix,SWY[6]-SW_H/2-iP+10,'#fb923c',8)}
+  iblk(0,1,2,3,'#4ade80',ifo,'#4ade80',iso,isw);iblk(2,3,2,3,'#facc15',ifo,'#facc15',iso,isw);
+  iblk(4,5,2,3,'#facc15',ifo,'#facc15',iso,isw);iblk(6,7,2,3,'#fb923c',ifo,'#fb923c',iso,isw);
+  var ix=STAGE_X[2]-iP+4;lbl('2×2',ix,SWY[0]-SW_H/2-iP+10,'#4ade80',lsz2);lbl('2×2',ix,SWY[2]-SW_H/2-iP+10,'#facc15',lsz2);
+  lbl('2×2',ix,SWY[4]-SW_H/2-iP+10,'#facc15',lsz2);lbl('2×2',ix,SWY[6]-SW_H/2-iP+10,'#fb923c',lsz2)}
 
 function drawTopology(svg,thick){
   var w=thick?1.3:.9,op=thick?.5:.35,da=thick?'5 5':'4 4';
@@ -933,26 +943,27 @@ function buildCtrlPanel(){
 
     // Lock button
     var lk=document.createElement('button');
-    lk.className='ctrl-lk'+(locked[i]?' on':'');
-    lk.textContent=locked[i]?'🔒':'🔓';
-    lk.style.color=locked[i]?col:'#475569';
-    lk.style.borderColor=locked[i]?col:'#475569';
+    var isLk=locked[i];
+    lk.className='ctrl-lk'+(isLk?' on':'');
+    lk.textContent=isLk?'🔒':'🔓';
+    lk.style.borderColor=isLk?col:'#47556950';
+    lk.style.background=isLk?col+'25':'transparent';
+    lk.style.boxShadow=isLk?'0 0 6px '+col+'40':'none';
+    lk.style.opacity=isLk?'1':'0.35';
     lk.dataset.i=i;
     lk.addEventListener('click',function(e){
       e.stopPropagation();
+      e.preventDefault();
       var idx=+this.dataset.i;
       toggleLock(idx);
-      // Immediately update this button visually
-      var isLocked=locked[idx];
-      var c=COLORS[idx];
-      this.textContent=isLocked?'🔒':'🔓';
-      this.className='ctrl-lk'+(isLocked?' on':'');
-      this.style.color=isLocked?c:'#475569';
-      this.style.borderColor=isLocked?c:'#475569';
-      // Then full update
-      renderStatus();renderSVG();
-      // Defer panel rebuild to avoid DOM conflict
-      setTimeout(function(){buildCtrlPanel()},50);
+      renderStatus();renderSVG();buildCtrlPanel();
+    });
+    lk.addEventListener('touchend',function(e){
+      e.stopPropagation();
+      e.preventDefault();
+      var idx=+this.dataset.i;
+      toggleLock(idx);
+      renderStatus();renderSVG();buildCtrlPanel();
     });
     row3.appendChild(lk);
   }
