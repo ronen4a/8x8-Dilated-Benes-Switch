@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -58,14 +58,14 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .header .sub{font-size:clamp(9px,2.5vw,11px);color:var(--muted);margin-top:6px;letter-spacing:.04em;line-height:1.5;padding:0 8px}
 
 /* ── STATUS BAR ── */
-.sbar{display:flex;justify-content:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;padding:0 4px}
+.sbar{display:flex;justify-content:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;padding:0 4px}
 .pill{padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid;letter-spacing:.03em;
   display:flex;align-items:center;gap:6px;backdrop-filter:blur(12px);background:var(--glass);white-space:nowrap}
 .dot{width:7px;height:7px;border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* ── CONTROL BAR ── */
-.cbar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;justify-content:center;padding:0 4px}
+.cbar{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;justify-content:center;padding:0 4px}
 .cbar-section{display:flex;align-items:center;gap:6px;background:var(--glass);border:1px solid var(--glass-border);
   border-radius:var(--radius-sm);padding:7px 12px;backdrop-filter:blur(16px);flex-shrink:0}
 #presetsBar{flex-wrap:wrap;justify-content:center;flex-shrink:1;min-width:0}
@@ -95,15 +95,14 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .helpbox.show{display:block}
 
 /* ── FEATURE TOGGLES ── */
-.ftbar{display:flex;justify-content:center;gap:6px;margin-bottom:12px;flex-wrap:wrap;padding:0 4px}
+.ftbar{display:flex;justify-content:center;gap:6px;margin-bottom:6px;flex-wrap:wrap;padding:0 4px}
 .ftbar::-webkit-scrollbar{display:none}
 .ftbtn{padding:5px 10px;border-radius:var(--radius-xs);font-size:9px;font-weight:700;font-family:inherit;
-  cursor:pointer;letter-spacing:.03em;border:1px solid var(--border);background:var(--surface);color:var(--dim);
-  transition:all .25s;display:flex;align-items:center;gap:4px;touch-action:manipulation;white-space:nowrap;flex-shrink:0}
+  cursor:pointer;letter-spacing:.03em;border:1px solid var(--border);background:var(--surface);color:var(--muted);
+  transition:all .25s;display:flex;align-items:center;justify-content:center;gap:0;touch-action:manipulation;white-space:nowrap;flex-shrink:0}
+.ftbtn:hover,.ftbtn:active{border-color:var(--dim);color:var(--text)}
 .ftbtn.on{border-color:var(--blue);color:var(--blue);background:rgba(56,189,248,.06);
   box-shadow:0 0 12px rgba(56,189,248,.08)}
-.ftbtn .fdot{width:5px;height:5px;border-radius:50%;background:var(--dim);transition:all .25s}
-.ftbtn.on .fdot{background:var(--blue);box-shadow:0 0 8px var(--blue)}
 
 /* ── SVG CONTAINER ── */
 .svgw{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);
@@ -215,25 +214,22 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 /* Phones */
 @media(max-width:640px){
-  .dash{padding:12px 4px 28px}
-  .header{margin-bottom:12px;padding:6px 0 16px}
+  .dash{padding:8px 4px 28px}
+  .header{margin-bottom:6px;padding:4px 0 10px}
   
-  /* Stack control bar vertically, full width */
-  .cbar{gap:6px;flex-direction:column;align-items:stretch}
-  .cbar-section{padding:6px 10px;justify-content:center;flex-wrap:wrap}
+  /* Presets bar */
+  .cbar{gap:4px;margin-bottom:6px}
+  .cbar-section{padding:6px 8px;justify-content:center;flex-wrap:wrap}
   #presetsBar{width:100%;gap:4px}
-  #presetsBar .pbtn{flex:1;text-align:center;padding:6px 4px}
-  .cbar-section .rbtn{flex:1}
-  .cbar-section .helpbtn{flex:0}
-  .cbar-section .ftbtn{flex:1;text-align:center}
+  #presetsBar .pbtn{flex:1;text-align:center;padding:10px 4px;font-size:11px}
   
-  /* Feature toggles: stretch to fill */
-  .ftbar{gap:4px;padding:0 2px;justify-content:stretch}
-  .ftbtn{flex:1;padding:5px 4px;font-size:8px;gap:3px;text-align:center;white-space:nowrap}
+  /* Feature toggle rows */
+  .ftbar{gap:4px;padding:0 2px;justify-content:stretch;margin-bottom:6px}
+  .ftbtn{flex:1;padding:10px 4px;font-size:9px;gap:3px;text-align:center;white-space:nowrap}
 
   /* Status bar pills stretch */
-  .sbar{gap:4px;padding:0 2px}
-  .pill{flex:1;justify-content:center;padding:6px 6px;font-size:10px}
+  .sbar{gap:4px;padding:0 2px;margin-bottom:6px}
+  .pill{flex:1;justify-content:center;padding:8px 6px;font-size:10px}
 
   /* SVG needs scroll */
   .scroll-hint{display:block}
@@ -259,10 +255,10 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 /* Small phones */
 @media(max-width:380px){
-  .dash{padding:8px 2px 24px}
-  .pill{padding:4px 4px;font-size:9px}
-  .pbtn{padding:5px 4px;font-size:9px}
-  .ftbtn{padding:4px 3px;font-size:7px}
+  .dash{padding:6px 2px 24px}
+  .pill{padding:6px 4px;font-size:9px}
+  .pbtn{padding:8px 2px;font-size:10px}
+  .ftbtn{padding:8px 2px;font-size:8px}
   .cbar-section{padding:5px 6px}
 }
 
@@ -425,16 +421,20 @@ html,body{overscroll-behavior:none}
 <div class="dash" id="mainDash" style="opacity:0">
   <div class="header"><h1>8×8 Dilated Beneš Network</h1><div class="sub">48 MZI Switches · 6 Stages × 8 · XOR-Stride [4,2,1,2,4] · Strictly Non-Blocking</div></div>
   <div class="sbar" id="statusBar"></div>
+  <span id="rerouteMsg" style="display:none"></span>
   <div class="cbar">
     <div class="cbar-section" id="presetsBar"><span class="cbar-lbl">PRESETS</span></div>
-    <div class="cbar-section"><span id="rerouteMsg"></span></div>
-    <div class="cbar-section"><button class="ftbtn on" onclick="openFocus()" style="border-color:var(--purple);color:var(--purple)"><span class="fdot" style="background:var(--purple)"></span>Network View</button><button class="ftbtn" id="compactBtn" onclick="toggleCompact()"><span class="fdot"></span>Fit Screen</button><button class="ftbtn" onclick="goFullscreen()"><span class="fdot"></span>Fullscreen</button></div>
   </div>
   <div class="ftbar">
-    <button class="ftbtn on" onclick="toggleFeature('loss',this)"><span class="fdot"></span>Insertion Loss</button>
-    <button class="ftbtn" onclick="toggleFeature('photon',this)"><span class="fdot"></span>Photon Flow</button>
-    <button class="ftbtn" onclick="toggleFeature('xtalk',this)"><span class="fdot"></span>Crosstalk Map</button>
-    <button class="ftbtn on" onclick="toggleFeature('monitor',this)"><span class="fdot"></span>Monitoring</button>
+    <button class="ftbtn on" onclick="openFocus()" style="border-color:var(--purple);color:var(--purple)">Network View</button>
+    <button class="ftbtn" id="compactBtn" onclick="toggleCompact()">Fit Screen</button>
+    <button class="ftbtn" onclick="goFullscreen()">Fullscreen</button>
+  </div>
+  <div class="ftbar">
+    <button class="ftbtn on" onclick="toggleFeature('loss',this)">Insertion Loss</button>
+    <button class="ftbtn" onclick="toggleFeature('photon',this)">Photon Flow</button>
+    <button class="ftbtn" onclick="toggleFeature('xtalk',this)">Crosstalk Map</button>
+    <button class="ftbtn on" onclick="toggleFeature('monitor',this)">Monitoring</button>
   </div>
   <div class="dash-main">
   <div class="dash-left">
