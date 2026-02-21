@@ -104,6 +104,11 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .ftbtn.on{border-color:var(--blue);color:var(--blue);background:rgba(56,189,248,.06);
   box-shadow:0 0 12px rgba(56,189,248,.08)}
 
+/* ── TOOLBAR (one line on PC) ── */
+.toolbar{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;flex-wrap:nowrap;padding:0 4px}
+.tb-group{display:flex;align-items:center;gap:4px;background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--radius-sm);padding:5px 8px;backdrop-filter:blur(16px)}
+
 /* ── SVG CONTAINER ── */
 .svgw{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);
   padding:4px;position:relative;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
@@ -131,9 +136,26 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   font-size:11px;font-weight:800;font-family:inherit;text-align:center;cursor:pointer;padding:0;
   touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;
   color-scheme:dark}
-.ctrl-dd-arrow{position:absolute;right:3px;top:50%;transform:translateY(-55%);font-size:14px;pointer-events:none;line-height:1}
+.ctrl-dd-arrow{position:absolute;right:3px;top:50%;transform:translateY(-55%);font-size:18px;pointer-events:none;line-height:1}
 .ctrl-dd:disabled{opacity:.3}
 .ctrl-dd option{background:var(--bg);color:var(--text)}
+/* Custom mobile dropdown */
+.ctrl-dd-btn{width:100%;height:30px;background:var(--bg);border:2px solid;border-radius:6px;
+  font-size:11px;font-weight:800;font-family:inherit;text-align:center;cursor:pointer;padding:0;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;gap:2px}
+.ctrl-dd-popup{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9000;
+  background:var(--card);border:2px solid var(--dim);border-radius:12px;padding:12px;
+  box-shadow:0 8px 40px rgba(0,0,0,.7);
+  display:none;grid-template-columns:repeat(4,1fr);gap:6px;width:220px}
+.ctrl-dd-popup.show{display:grid}
+.ctrl-dd-overlay{display:none;position:fixed;inset:0;z-index:8999;background:rgba(0,0,0,.5)}
+.ctrl-dd-overlay.show{display:block}
+.ctrl-dd-opt{height:42px;border-radius:8px;border:2px solid var(--border);background:var(--surface);
+  color:var(--text);font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;display:flex;
+  align-items:center;justify-content:center;touch-action:manipulation;transition:all .15s}
+.ctrl-dd-opt.active{border-width:2.5px;box-shadow:0 0 10px currentColor}
+.ctrl-dd-opt.locked-opt{background:#1a1a2e;color:#475569;border-color:#2a2a3e;cursor:default;opacity:.5}
+.ctrl-dd-opt:not(.locked-opt):active{transform:scale(1.1)}
 .ctrl-lk{flex:1;height:26px;border:1px solid #475569;background:var(--surface);cursor:pointer;font-size:11px;
   border-radius:5px;display:flex;align-items:center;justify-content:center;padding:0;touch-action:manipulation;transition:all .15s}
 .ctrl-lk.on{border-color:var(--yellow);background:rgba(250,204,21,.08)}
@@ -148,6 +170,29 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 /* ── MONITOR PANEL ── */
 .mpanel{display:none;margin-top:12px}
 .mpanel.show{display:block}
+.cpanel{display:none;margin-top:4px}
+.cpanel.show{display:block}
+.mon-help-btn{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--dim);background:none;color:var(--muted);
+  font-size:10px;font-weight:700;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;flex-shrink:0;touch-action:manipulation;line-height:1}
+.mon-help-btn:hover,.mon-help-btn:active{border-color:var(--blue);color:var(--blue)}
+.mon-help-tip{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xs);
+  padding:12px;font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+.mon-help-tip.show{display:block}
+.mon-help-tip b{color:var(--text);font-weight:600}
+.mon-help-tip .hl-green{color:var(--green)}
+.mon-help-tip .hl-yellow{color:var(--yellow)}
+.mon-help-tip .hl-red{color:var(--red)}
+.mht-section{padding:6px 0;border-bottom:1px solid var(--border)}
+.mht-section:last-of-type{border-bottom:none}
+.mht-title{font-size:11px;font-weight:700;color:var(--text);margin-bottom:3px}
+.mht-label{font-size:9px;font-weight:700;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.mht-val{font-size:10px;color:var(--muted);line-height:1.7}
+.mht-note{font-size:9px;color:var(--dim);padding-top:6px;font-style:italic}
+.ctrl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;flex-wrap:wrap}
+.ctrl-header .pbtn{background:var(--card);color:var(--text);border:1.5px solid var(--dim);padding:5px 14px;font-size:11px;font-weight:600;
+  box-shadow:0 2px 8px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.04)}
+.ctrl-header .pbtn:hover,.ctrl-header .pbtn:active{border-color:var(--orange);color:var(--orange);box-shadow:0 2px 12px rgba(251,146,60,.2)}
 .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);padding:14px;
   position:relative;overflow:hidden;backdrop-filter:blur(16px);box-shadow:0 4px 24px rgba(0,0,0,.2)}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
@@ -217,15 +262,11 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   .dash{padding:8px 4px 28px}
   .header{margin-bottom:6px;padding:4px 0 10px}
   
-  /* Presets bar */
-  .cbar{gap:4px;margin-bottom:6px}
-  .cbar-section{padding:6px 8px;justify-content:center;flex-wrap:wrap}
-  #presetsBar{width:100%;gap:4px}
-  #presetsBar .pbtn{flex:1;text-align:center;padding:10px 4px;font-size:11px}
-  
-  /* Feature toggle rows */
-  .ftbar{gap:4px;padding:0 2px;justify-content:stretch;margin-bottom:6px}
-  .ftbtn{flex:1;padding:10px 4px;font-size:9px;gap:3px;text-align:center;white-space:nowrap}
+  /* Toolbar stacks on mobile */
+  .toolbar{flex-wrap:wrap;gap:4px}
+  .tb-group{width:100%;justify-content:center;padding:5px 6px;gap:3px}
+  .tb-group .pbtn{flex:1;text-align:center;padding:10px 4px;font-size:11px}
+  .tb-group .ftbtn{flex:1;padding:10px 4px;font-size:9px;text-align:center}
 
   /* Status bar pills stretch */
   .sbar{gap:4px;padding:0 2px;margin-bottom:6px}
@@ -233,6 +274,10 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
   /* SVG needs scroll */
   .scroll-hint{display:block}
+
+  /* Hide ctrl card labels on mobile */
+  .ctrl-header .ctitle{display:none}
+  .ctrl-header .cbar-lbl{display:none}
   
   /* Monitor: 2 columns */
   .mgrid{grid-template-columns:repeat(2,1fr);gap:5px}
@@ -257,9 +302,9 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 @media(max-width:380px){
   .dash{padding:6px 2px 24px}
   .pill{padding:6px 4px;font-size:9px}
-  .pbtn{padding:8px 2px;font-size:10px}
-  .ftbtn{padding:8px 2px;font-size:8px}
-  .cbar-section{padding:5px 6px}
+  .tb-group .pbtn{padding:8px 2px;font-size:10px}
+  .tb-group .ftbtn{padding:8px 2px;font-size:8px}
+  .tb-group{padding:4px 4px}
 }
 
 /* Tablets */
@@ -270,11 +315,25 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 /* Desktop */
 @media(min-width:1025px){
-  .dash{padding:20px 24px 40px}
-  .mgrid{grid-template-columns:repeat(8,1fr)}
-  #mainSvg{min-width:unset}
+  .dash{padding:8px 24px 12px}
+  .header{margin-bottom:6px;padding:4px 0 10px;max-width:1000px;margin-left:auto;margin-right:auto}
+  .header h1{font-size:20px}
+  .header .sub{font-size:10px;margin-top:3px}
+  .sbar{margin-bottom:4px;max-width:1000px;margin-left:auto;margin-right:auto}
+  .pill{padding:4px 12px;font-size:10px}
+  .tb-group{padding:3px 6px}
+  .ftbtn{padding:4px 8px;font-size:8px}
+  .pbtn{padding:4px 10px;font-size:10px}
+  .svgw{padding:2px;max-width:1000px;margin:0 auto}
+  .cpanel{max-width:1000px;margin-left:auto;margin-right:auto}
+  .mpanel{margin-top:4px;max-width:1000px;margin-left:auto;margin-right:auto}
+  #mainSvg{min-width:unset;max-height:calc(100vh - 280px)}
   #focusSvg{min-width:unset}
   .scroll-hint{display:none !important}
+  .mgrid{grid-template-columns:repeat(8,1fr);gap:4px}
+  .mcell{padding:6px 4px}
+  .lbar{display:none}
+  .toolbar{margin-bottom:4px;max-width:1000px;margin-left:auto;margin-right:auto}
 }
 
 /* Touch device improvements */
@@ -352,11 +411,8 @@ html,body{overscroll-behavior:none}
   .header h1{font-size:13px}
   .sub{font-size:7px}
   .sbar{margin-bottom:2px}
-  .cbar{margin-bottom:2px}
-  .ftbar{margin-bottom:2px}
-  .lbar{display:none}
+  .toolbar{margin-bottom:2px}
   .scroll-hint{display:none}
-  .ctrl-panel{display:none!important}
   .focus-overlay{padding:0;overflow:hidden}
   .focus-overlay .fo-header{display:none}
   .focus-overlay .fo-legend{display:none}
@@ -368,9 +424,7 @@ html,body{overscroll-behavior:none}
 @media(orientation:landscape) and (min-height:501px) and (max-height:800px){
   .dash{padding:6px}
   .header{margin-bottom:4px}
-  .lbar{display:none}
   .scroll-hint{display:none}
-  .ctrl-panel{display:none!important}
   .focus-overlay{padding:4px;overflow:hidden}
   .focus-overlay .fo-header{display:none}
   .focus-overlay .fo-legend{display:none}
@@ -422,19 +476,19 @@ html,body{overscroll-behavior:none}
   <div class="header"><h1>8×8 Dilated Beneš Network</h1><div class="sub">48 MZI Switches · 6 Stages × 8 · XOR-Stride [4,2,1,2,4] · Strictly Non-Blocking</div></div>
   <div class="sbar" id="statusBar"></div>
   <span id="rerouteMsg" style="display:none"></span>
-  <div class="cbar">
-    <div class="cbar-section" id="presetsBar"></div>
-  </div>
-  <div class="ftbar">
-    <button class="ftbtn on" onclick="openFocus()" style="border-color:var(--purple);color:var(--purple)">Network View</button>
-    <button class="ftbtn" id="compactBtn" onclick="toggleCompact()">Fit Screen</button>
-    <button class="ftbtn" onclick="goFullscreen()">Fullscreen</button>
-  </div>
-  <div class="ftbar">
-    <button class="ftbtn on" onclick="toggleFeature('loss',this)">Insertion Loss</button>
-    <button class="ftbtn" onclick="toggleFeature('photon',this)">Photon Flow</button>
-    <button class="ftbtn" onclick="toggleFeature('xtalk',this)">Crosstalk Map</button>
-    <button class="ftbtn on" onclick="toggleFeature('monitor',this)">Monitoring</button>
+  <div class="toolbar">
+    <div class="tb-group">
+      <button class="ftbtn on" onclick="openFocus()" style="border-color:var(--purple);color:var(--purple)">Network View</button>
+      <button class="ftbtn" id="compactBtn" onclick="toggleCompact()">Fit Screen</button>
+      <button class="ftbtn" onclick="goFullscreen()">Fullscreen</button>
+    </div>
+    <div class="tb-group">
+      <button class="ftbtn on" onclick="toggleFeature('loss',this)">Insertion Loss</button>
+      <button class="ftbtn" onclick="toggleFeature('photon',this)">Photon Flow</button>
+      <button class="ftbtn" onclick="toggleFeature('xtalk',this)">Crosstalk Map</button>
+      <button class="ftbtn on" onclick="toggleFeature('monitor',this)">Monitoring</button>
+      <button class="ftbtn on" id="ctrlToggleBtn" onclick="toggleCtrlPanel(this)">Controls</button>
+    </div>
   </div>
   <div class="dash-main">
   <div class="dash-left">
@@ -442,7 +496,9 @@ html,body{overscroll-behavior:none}
     <svg id="mainSvg" viewBox="50 0 1120 580"></svg>
     <button class="fs-exit" id="fsExit" onclick="exitFullscreen()">✕ Exit Fullscreen</button>
   </div>
-  <div class="ctrl-panel" id="ctrlPanel"></div>
+  <div class="cpanel show" id="ctrlPanelWrap">
+    <div class="card"><div class="ctrl-header"><div class="ctitle" style="margin-bottom:0">Channel Control</div><div class="tb-group" id="presetsBar" style="margin:0;padding:3px 6px"><span class="cbar-lbl">PRESETS</span></div></div><div class="ctrl-panel" id="ctrlPanel"></div></div>
+  </div>
   <div class="scroll-hint">← Swipe to explore · or tap <b>Fit Screen</b> above →</div>
   <div class="lbar">
     <div class="litem"><span class="ll">SWITCHES: </span><span style="color:var(--text)">BAR · CROSS · </span><span style="color:var(--dim)">idle</span></div>
@@ -452,7 +508,7 @@ html,body{overscroll-behavior:none}
   </div>
   <div class="dash-right">
   <div class="mpanel show" id="monitorPanel">
-    <div class="card"><div class="ctitle">Real-Time Port Monitoring — Power · BER · OSNR</div><div class="mgrid" id="monGrid"></div></div>
+    <div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="ctitle" style="margin-bottom:0">Real-Time Port Monitoring — Power · BER · OSNR</div><button class="mon-help-btn" onclick="document.getElementById('monHelpTip').classList.toggle('show')">?</button></div><div class="mon-help-tip" id="monHelpTip"><div class="mht-section"><div class="mht-title">📊 How Values Are Calculated</div><div class="mht-row"><div class="mht-label">Insertion Loss</div><div class="mht-val">Each signal passes through <b>6 MZI switches</b> and <b>5 waveguide segments</b>.<br>Loss per switch: <b>0.5 dB</b> (bar) · <b>0.8 dB</b> (cross) · Waveguide: <b>0.15 dB</b> each</div></div></div><div class="mht-section"><div class="mht-title">📡 Power <span style="color:var(--dim)">(dBm)</span></div><div class="mht-val">Received optical power = input − total insertion loss<br><span class="hl-green">● Good: &gt; −5</span> · <span class="hl-yellow">● Warn: −5 to −8</span> · <span class="hl-red">● Bad: &lt; −8</span></div></div><div class="mht-section"><div class="mht-title">📉 BER <span style="color:var(--dim)">(Bit Error Rate)</span></div><div class="mht-val">Error probability derived from path loss: 10<sup>(−12 + loss × 0.4)</sup><br><span class="hl-green">● Good: &lt; 10⁻⁹</span> · <span class="hl-yellow">● Warn: 10⁻⁹ – 10⁻⁶</span> · <span class="hl-red">● Bad: &gt; 10⁻⁶</span></div></div><div class="mht-section"><div class="mht-title">📶 OSNR <span style="color:var(--dim)">(dB)</span></div><div class="mht-val">Signal-to-noise ratio = 38 − loss × 1.5<br><span class="hl-green">● Good: &gt; 30</span> · <span class="hl-yellow">● Warn: 20 – 30</span> · <span class="hl-red">● Bad: &lt; 20</span></div></div><div class="mht-note">Inactive channels show noise floor only (−40 dBm · BER ~10⁻³ · OSNR ~5 dB)</div></div><div class="mgrid" id="monGrid"></div></div>
   </div>
   </div>
   </div>
@@ -487,6 +543,7 @@ function toggleHL(i){if(highlight.has(i))highlight.delete(i);else highlight.add(
 var features={loss:true,photon:false,xtalk:false,monitor:true};
 function toggleFeature(f,btn){features[f]=!features[f];btn.classList.toggle('on');
   if(f==='monitor')document.getElementById('monitorPanel').classList.toggle('show',features.monitor);renderSVG()}
+function toggleCtrlPanel(btn){btn.classList.toggle('on');document.getElementById('ctrlPanelWrap').classList.toggle('show')}
 
 var animatePaths=false;
 
@@ -533,24 +590,39 @@ var connTable=[],connLookup={};
   raw.forEach(function(c){connTable.push(c);connLookup[s+'-'+c.srcSw+'-'+c.type]=c})}})();
 
 // ── Routing ──
-function routeAll(pm,pre){var used={},res=Array(N).fill(null);
+function routeAll(pm,pre,priority){var used={},res=Array(N).fill(null);
   if(pre)for(var i=0;i<N;i++)if(pre[i]){res[i]=pre[i];pre[i].switches.forEach(function(s){used[s]=1})}
-  var todo=[];for(var i=0;i<N;i++)if(!res[i])todo.push(i);var ar={};
+  var todo=[];for(var i=0;i<N;i++)if(!res[i])todo.push(i);
+  // Put priority channel first so it gets routed before others
+  if(priority!==undefined&&priority!==null){
+    var pi=todo.indexOf(priority);
+    if(pi>0){todo.splice(pi,1);todo.unshift(priority)}}
+  var ar={};
   for(var ti=0;ti<todo.length;ti++){var sig=todo[ti];ar[sig]=[];
     for(var c=0;c<32;c++){var pos=sig,ch=[],sw=[];
       for(var s=0;s<6;s++){sw.push(s+'-'+pos);if(s<5){var cr=Boolean((c>>s)&1);ch.push(cr);if(cr)pos^=STRIDES[s]}}
       if(pos===pm[sig])ar[sig].push({choices:ch,switches:sw})}}
+  // Try full backtracking first
+  var fullUsed={};for(var k in used)fullUsed[k]=1;
+  var fullRes=res.slice();
   function solve(idx){if(idx===todo.length)return true;var sig=todo[idx];
     for(var ri=0;ri<ar[sig].length;ri++){var r=ar[sig][ri],bad=false;
+      for(var j=0;j<r.switches.length;j++)if(fullUsed[r.switches[j]]){bad=true;break}
+      if(bad)continue;r.switches.forEach(function(s){fullUsed[s]=1});fullRes[sig]=r;
+      if(solve(idx+1))return true;r.switches.forEach(function(s){delete fullUsed[s]});fullRes[sig]=null}return false}
+  if(solve(0))return fullRes;
+  // Full solution not found — greedy: route each channel individually (priority first)
+  for(var ti=0;ti<todo.length;ti++){var sig=todo[ti];
+    for(var ri=0;ri<ar[sig].length;ri++){var r=ar[sig][ri],bad=false;
       for(var j=0;j<r.switches.length;j++)if(used[r.switches[j]]){bad=true;break}
-      if(bad)continue;r.switches.forEach(function(s){used[s]=1});res[sig]=r;
-      if(solve(idx+1))return true;r.switches.forEach(function(s){delete used[s]});res[sig]=null}return false}
-  solve(0);return res}
+      if(bad)continue;r.switches.forEach(function(s){used[s]=1});res[sig]=r;break}
+  }
+  return res}
 function trace(inp,route){if(!route)return null;var pos=[],p=inp;
   for(var s=0;s<6;s++){var cr=(s<5)?route.choices[s]:false;pos.push({stage:s,sw:p,cross:cr});if(s<5&&cr)p^=STRIDES[s]}
   return{positions:pos,output:p}}
-function compute(){var pre=Array(N).fill(null);for(var i=0;i<N;i++)if(locked[i]&&frozenRoutes[i])pre[i]=frozenRoutes[i];
-  routes=routeAll(perm,pre);pathData=routes.map(function(r,i){return r?trace(i,r):null});
+function compute(priority){var pre=Array(N).fill(null);for(var i=0;i<N;i++)if(locked[i]&&frozenRoutes[i])pre[i]=frozenRoutes[i];
+  routes=routeAll(perm,pre,priority);pathData=routes.map(function(r,i){return r?trace(i,r):null});
   switchUsage={};pathData.forEach(function(pd,i){if(pd)pd.positions.forEach(function(p){switchUsage[p.stage+'-'+p.sw]=i})})}
 
 // ── Models ──
@@ -911,34 +983,65 @@ function buildCtrlPanel(){
     });
     row1.appendChild(ch);
 
-    // Output dropdown
+    // Output dropdown - custom popup for all devices
     var wrap=document.createElement('div');
     wrap.className='ctrl-dd-wrap';
-    var sel=document.createElement('select');
-    sel.className='ctrl-dd';
-    sel.style.color=col;sel.style.borderColor=col+'80';
-    sel.style.background=col+'10';
-    sel.disabled=locked[i];
-    // Find which outputs are taken by locked channels
-    var lockedOuts=[];
-    for(var li=0;li<N;li++){if(locked[li]&&li!==i)lockedOuts.push(perm[li])}
-    for(var j=0;j<N;j++){
-      var opt=document.createElement('option');opt.value=j;
-      var isLockedOut=lockedOuts.indexOf(j)!==-1;
-      opt.textContent=isLockedOut?'→'+j+' 🔒':'→'+j;
-      opt.disabled=isLockedOut;
-      if(isLockedOut)opt.style.color='#475569';
-      if(perm[i]===j)opt.selected=true;
-      sel.appendChild(opt);
+    {
+      var btn=document.createElement('button');
+      btn.className='ctrl-dd-btn';
+      btn.style.color=col;btn.style.borderColor=col+'80';btn.style.background=col+'10';
+      btn.innerHTML=perm[i]+'<span style="font-size:16px;margin-left:2px;opacity:.5">▾</span>';
+      btn.disabled=locked[i];
+      if(locked[i])btn.style.opacity='.3';
+      btn.dataset.i=i;
+      btn.addEventListener('click',function(e){
+        e.stopPropagation();
+        var ci=+this.dataset.i;var cc=COLORS[ci];
+        // Remove old popup
+        var old=document.getElementById('mobilePopup');if(old)old.remove();
+        var oldOv=document.getElementById('mobileOverlay');if(oldOv)oldOv.remove();
+        // Overlay
+        var ov=document.createElement('div');
+        ov.id='mobileOverlay';ov.className='ctrl-dd-overlay show';
+        ov.addEventListener('click',function(){ov.remove();pp.remove()});
+        document.body.appendChild(ov);
+        // Popup
+        var pp=document.createElement('div');
+        pp.id='mobilePopup';pp.className='ctrl-dd-popup show';
+        // Title
+        var ttl=document.createElement('div');
+        ttl.style.cssText='grid-column:1/-1;text-align:center;font-size:10px;font-weight:700;color:'+cc+';letter-spacing:.06em;margin-bottom:2px';
+        ttl.textContent='CH '+ci+' → OUTPUT';
+        pp.appendChild(ttl);
+        // Options
+        var lockedOuts=[];
+        for(var li=0;li<N;li++){if(locked[li]&&li!==ci)lockedOuts.push(perm[li])}
+        for(var j=0;j<N;j++){
+          var ob=document.createElement('button');
+          ob.className='ctrl-dd-opt';
+          ob.textContent=j;
+          var isLockedOut=lockedOuts.indexOf(j)!==-1;
+          if(isLockedOut){
+            ob.classList.add('locked-opt');
+            ob.innerHTML=j+'<span style="font-size:8px;margin-left:1px">🔒</span>';
+          }else{
+            ob.style.color=cc;ob.style.borderColor=cc+'40';
+          }
+          if(perm[ci]===j&&!isLockedOut){ob.classList.add('active');ob.style.borderColor=cc;ob.style.background=cc+'25';ob.style.color=cc}
+          ob.dataset.i=ci;ob.dataset.j=j;
+          if(!isLockedOut){
+            ob.addEventListener('click',function(ev){
+              ev.stopPropagation();
+              handlePermChange(+this.dataset.i,+this.dataset.j);
+              ov.remove();pp.remove();render();
+            });
+          }
+          pp.appendChild(ob);
+        }
+        document.body.appendChild(pp);
+      });
+      wrap.appendChild(btn);
     }
-    sel.dataset.i=i;
-    sel.addEventListener('change',function(e){
-      e.stopPropagation();
-      handlePermChange(+this.dataset.i,+e.target.value);render();
-    });
-    var arrow=document.createElement('span');
-    arrow.className='ctrl-dd-arrow';arrow.textContent='▾';arrow.style.color=col;
-    wrap.appendChild(sel);wrap.appendChild(arrow);
     row2.appendChild(wrap);
 
     // Lock button
@@ -1215,7 +1318,7 @@ function handlePermChange(i,o){
   var ex=perm.indexOf(o);
   if(ex!==-1&&ex!==i){if(locked[ex])return;perm[ex]=perm[i]}
   perm[i]=o;
-  compute();
+  compute(i);
   // Update frozenRoutes for locked channels
   for(var ch=0;ch<N;ch++){if(locked[ch]&&routes[ch])frozenRoutes[ch]=routes[ch]}
   renderSVG();buildCtrlPanel();renderStatus();simMonitor();
@@ -1232,15 +1335,13 @@ function toggleLock(i){
 }
 function handleReroute(){var hl=false;for(var i=0;i<N;i++)if(locked[i])hl=true;if(!hl)return;
   var pre=Array(N).fill(null);for(var i=0;i<N;i++)if(locked[i]&&frozenRoutes[i])pre[i]=frozenRoutes[i];var nr=routeAll(perm,pre);
-  if(nr.every(function(r){return r!==null})){routes=nr;pathData=routes.map(function(r,i){return r?trace(i,r):null});
-    switchUsage={};pathData.forEach(function(pd,i){if(pd)pd.positions.forEach(function(p){switchUsage[p.stage+'-'+p.sw]=i})});
-    // Update frozenRoutes for locked channels to their new routes
-    for(var i=0;i<N;i++){if(locked[i])frozenRoutes[i]=routes[i]}
-    showMsg('success','✓ Rerouted!');renderSVG();renderStatus()}
-  else{var fail=[],lks=[];for(var i=0;i<N;i++){if(!nr[i])fail.push(i);if(locked[i])lks.push(i)}
-    document.getElementById('failedChips').innerHTML=fail.map(function(s){return'<span class="mchip" style="background:'+COLORS[s]+'25;color:'+COLORS[s]+';border-color:'+COLORS[s]+'50">In'+s+'→'+perm[s]+'</span>'}).join('');
-    document.getElementById('lockedChips').innerHTML=lks.map(function(s){return'<span class="mchip" style="background:'+COLORS[s]+'15;color:'+COLORS[s]+';border-color:'+COLORS[s]+'30">🔒'+s+'→'+perm[s]+'</span>'}).join('');
-    document.getElementById('modal').classList.add('show')}}
+  routes=nr;pathData=routes.map(function(r,i){return r?trace(i,r):null});
+  switchUsage={};pathData.forEach(function(pd,i){if(pd)pd.positions.forEach(function(p){switchUsage[p.stage+'-'+p.sw]=i})});
+  for(var i=0;i<N;i++){if(locked[i])frozenRoutes[i]=routes[i]}
+  var fail=[];for(var i=0;i<N;i++){if(!nr[i])fail.push(i)}
+  if(fail.length===0){showMsg('success','✓ Rerouted!')}
+  else{showMsg('warn','⚠ '+fail.length+' channel'+(fail.length>1?'s':'')+' failed to route')}
+  renderSVG();renderStatus()}
 function handleForceReroute(){locked=Array(N).fill(false);frozenRoutes=Array(N).fill(null);closeModal();render()}
 function closeModal(){document.getElementById('modal').classList.remove('show')}
 function render(){compute();renderStatus();renderSVG();simMonitor();document.getElementById('rerouteMsg').innerHTML=''}
@@ -1249,6 +1350,7 @@ renderPresets();animatePaths=true;render();setTimeout(function(){animatePaths=fa
 document.getElementById('mainSvg').addEventListener('click',function(e){
   if(e.target===document.getElementById('mainSvg')&&highlight.size>0){highlight=new Set();renderSVG()}
 });
+document.addEventListener('click',function(){var o=document.getElementById('mobileOverlay');var p=document.getElementById('mobilePopup');if(o)o.remove();if(p)p.remove()});
 window.addEventListener('resize',function(){buildCtrlPanel()});
 setInterval(function(){if(features.monitor)simMonitor()},1500);
 
