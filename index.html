@@ -177,18 +177,18 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   transition:all .2s;flex-shrink:0;touch-action:manipulation;line-height:1}
 .mon-help-btn:hover,.mon-help-btn:active{border-color:var(--blue);color:var(--blue)}
 .mon-help-tip{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xs);
-  padding:12px;font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+  padding:12px;font-size:12px;color:var(--text);line-height:1.6;margin-bottom:10px}
 .mon-help-tip.show{display:block}
-.mon-help-tip b{color:var(--text);font-weight:600}
+.mon-help-tip b{color:#fff;font-weight:700}
 .mon-help-tip .hl-green{color:var(--green)}
 .mon-help-tip .hl-yellow{color:var(--yellow)}
 .mon-help-tip .hl-red{color:var(--red)}
-.mht-section{padding:6px 0;border-bottom:1px solid var(--border)}
+.mht-section{padding:8px 0;border-bottom:1px solid var(--border)}
 .mht-section:last-of-type{border-bottom:none}
-.mht-title{font-size:11px;font-weight:700;color:var(--text);margin-bottom:3px}
-.mht-label{font-size:9px;font-weight:700;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
-.mht-val{font-size:10px;color:var(--muted);line-height:1.7}
-.mht-note{font-size:9px;color:var(--dim);padding-top:6px;font-style:italic}
+.mht-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:5px}
+.mht-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.mht-val{font-size:11px;color:#c8ceda;line-height:1.8}
+.mht-note{font-size:10px;padding-top:6px;font-style:italic}
 .ctrl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;flex-wrap:wrap}
 .ctrl-header .pbtn{background:var(--card);color:var(--text);border:1.5px solid var(--dim);padding:5px 14px;font-size:11px;font-weight:600;
   box-shadow:0 2px 8px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.04)}
@@ -259,7 +259,7 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 /* Phones */
 @media(max-width:640px){
-  .dash{padding:8px 4px 28px}
+  .dash{padding:8px 4px 60px}
   .header{margin-bottom:6px;padding:4px 0 10px}
   
   /* Toolbar stacks on mobile */
@@ -284,8 +284,8 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   .mcell{padding:8px 5px}
   
   /* Legend: stack */
-  .lbar{gap:6px}
-  .litem{min-width:100%;font-size:9px;padding:6px 10px}
+  .lbar{gap:6px;margin-bottom:20px}
+  .litem{min-width:100%;font-size:9px;padding:6px 10px;white-space:nowrap;overflow:visible}
   
   /* Modal */
   .mbox{padding:20px 16px}
@@ -508,7 +508,7 @@ html,body{overscroll-behavior:none}
   </div>
   <div class="dash-right">
   <div class="mpanel show" id="monitorPanel">
-    <div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><div class="ctitle" style="margin-bottom:0">Real-Time Port Monitoring — Power · BER · OSNR</div><button class="mon-help-btn" onclick="document.getElementById('monHelpTip').classList.toggle('show')">?</button></div><div class="mon-help-tip" id="monHelpTip"><div class="mht-section"><div class="mht-title">📊 How Values Are Calculated</div><div class="mht-row"><div class="mht-label">Insertion Loss</div><div class="mht-val">Each signal passes through <b>6 MZI switches</b> and <b>5 waveguide segments</b>.<br>Loss per switch: <b>0.5 dB</b> (bar) · <b>0.8 dB</b> (cross) · Waveguide: <b>0.15 dB</b> each</div></div></div><div class="mht-section"><div class="mht-title">📡 Power <span style="color:var(--dim)">(dBm)</span></div><div class="mht-val">Received optical power = input − total insertion loss<br><span class="hl-green">● Good: &gt; −5</span> · <span class="hl-yellow">● Warn: −5 to −8</span> · <span class="hl-red">● Bad: &lt; −8</span></div></div><div class="mht-section"><div class="mht-title">📉 BER <span style="color:var(--dim)">(Bit Error Rate)</span></div><div class="mht-val">Error probability derived from path loss: 10<sup>(−12 + loss × 0.4)</sup><br><span class="hl-green">● Good: &lt; 10⁻⁹</span> · <span class="hl-yellow">● Warn: 10⁻⁹ – 10⁻⁶</span> · <span class="hl-red">● Bad: &gt; 10⁻⁶</span></div></div><div class="mht-section"><div class="mht-title">📶 OSNR <span style="color:var(--dim)">(dB)</span></div><div class="mht-val">Signal-to-noise ratio = 38 − loss × 1.5<br><span class="hl-green">● Good: &gt; 30</span> · <span class="hl-yellow">● Warn: 20 – 30</span> · <span class="hl-red">● Bad: &lt; 20</span></div></div><div class="mht-note">Inactive channels show noise floor only (−40 dBm · BER ~10⁻³ · OSNR ~5 dB)</div></div><div class="mgrid" id="monGrid"></div></div>
+    <div class="card"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div class="ctitle" style="margin-bottom:0">Real-Time Port Monitoring — Power · BER · OSNR</div><button class="mon-help-btn" onclick="document.getElementById('monHelpTip').classList.toggle('show')">?</button></div><div class="mon-help-tip" id="monHelpTip"><div class="mht-section"><div class="mht-title">💡 How It Works</div><div class="mht-val">Light enters at <b>0 dBm</b> and loses power at every component along the path:</div><div style="margin:8px 0;padding:8px;background:var(--bg);border-radius:6px;font-size:12px;text-align:center;line-height:2.2"><span style="color:var(--green)">IN 0dBm</span> → <span style="color:var(--dim)">[Switch −0.5]</span> → <span style="color:var(--dim)">[WG −0.15]</span> → <span style="color:var(--dim)">[Switch −0.8]</span> → <span style="color:var(--dim)">[WG −0.15]</span> → … → <span style="color:var(--orange)">OUT −4.6dBm</span></div><div style="font-size:11px;color:#c8ceda;margin-bottom:4px"><b style="color:var(--text)">Each path passes through:</b> 6 switches + 5 waveguide segments</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px"><div style="flex:1;min-width:100px;padding:8px 10px;background:var(--bg);border-radius:4px;font-size:11px"><b style="color:var(--text)">Switch (bar)</b><br><span style="color:var(--green)">−0.5 dB</span> · straight</div><div style="flex:1;min-width:100px;padding:8px 10px;background:var(--bg);border-radius:4px;font-size:11px"><b style="color:var(--text)">Switch (cross)</b><br><span style="color:var(--orange)">−0.8 dB</span> · crossing</div><div style="flex:1;min-width:100px;padding:8px 10px;background:var(--bg);border-radius:4px;font-size:11px"><b style="color:var(--text)">Waveguide</b><br><span style="color:var(--muted)">−0.15 dB</span> · link</div></div></div><div class="mht-section"><div class="mht-title">📊 What The Numbers Mean</div><div style="display:flex;flex-direction:column;gap:6px;margin-top:4px"><div style="padding:10px;background:var(--bg);border-radius:6px;font-size:11px;border-left:3px solid var(--green)"><b style="color:var(--text)">📡 Power (dBm)</b> — How much light reaches the output<br><span style="color:#c8ceda">More loss = weaker signal = worse performance</span><br><span class="hl-green">● &gt; −5 Good</span> · <span class="hl-yellow">● −5 to −8 Warn</span> · <span class="hl-red">● &lt; −8 Bad</span></div><div style="padding:10px;background:var(--bg);border-radius:6px;font-size:11px;border-left:3px solid var(--yellow)"><b style="color:var(--text)">📉 BER (Bit Error Rate)</b> — How many bits arrive wrong<br><span style="color:#c8ceda">10⁻¹² = 1 error per trillion bits (excellent)</span><br><span class="hl-green">● &lt; 10⁻⁹ Good</span> · <span class="hl-yellow">● 10⁻⁹–10⁻⁶ Warn</span> · <span class="hl-red">● &gt; 10⁻⁶ Bad</span></div><div style="padding:10px;background:var(--bg);border-radius:6px;font-size:11px;border-left:3px solid var(--blue)"><b style="color:var(--text)">📶 OSNR (dB)</b> — Signal strength vs noise<br><span style="color:#c8ceda">Higher = cleaner signal, easier to decode</span><br><span class="hl-green">● &gt; 30 Good</span> · <span class="hl-yellow">● 20–30 Warn</span> · <span class="hl-red">● &lt; 20 Bad</span></div></div></div><div class="mht-section"><div class="mht-title">🔗 How They Connect</div><div class="mht-val" style="line-height:1.8">More <b>cross switches</b> in a path → higher loss → weaker power → higher BER → lower OSNR<br>A path with <b>all bar</b> = best case (−3.75 dB) · <b>all cross</b> = worst case (−5.55 dB)</div></div><div class="mht-note" style="color:var(--blue)">🔄 Values fluctuate with ±0.15 dB simulated noise every 1.5s · Inactive channels show noise floor only</div></div><div class="mgrid" id="monGrid"></div></div>
   </div>
   </div>
   </div>
@@ -1252,7 +1252,13 @@ function renderMonitor(){var grid=document.getElementById('monGrid');grid.innerH
     var bs=d.ber.toExponential(1),bc=d.ber<1e-9?'#4ade80':d.ber<1e-6?'#facc15':'#f87171',oc=d.osnr>30?'#4ade80':d.osnr>20?'#facc15':'#f87171';
     var c=document.createElement('div');c.className='mcell';c.style.borderColor=has?col+'30':'var(--border)';
     if(has)c.style.boxShadow='0 0 12px '+col+'08';
-    c.innerHTML='<div class="mch" style="color:'+col+'">CH '+(i+1)+'</div><div style="font-size:10px;font-weight:700;color:'+pc+'">'+d.power.toFixed(1)+' <span style="font-size:8px;color:var(--dim)">dBm</span></div><div class="mbar"><div class="mbar-fill" style="width:'+(pn*100)+'%;background:'+pc+'"></div></div><div style="font-size:9px;color:'+bc+'">BER '+bs+'</div><div style="font-size:9px;color:'+oc+'">OSNR '+d.osnr.toFixed(1)+'</div>';
+    var pw=d.power.toFixed(1);
+    var bexp=Math.floor(Math.log10(d.ber));
+    var bman=(d.ber/Math.pow(10,bexp)).toFixed(1);
+    var supDigits={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻'};
+    var bsup=String(bexp).split('').map(function(c){return supDigits[c]||c}).join('');
+    var bstr=bman+'×10'+bsup;
+    c.innerHTML='<div class="mch" style="color:'+col+'">CH '+(i+1)+'</div><div style="font-size:10px;font-weight:700;color:'+pc+'">'+pw+' <span style="font-size:8px;color:var(--dim)">dBm</span></div><div class="mbar"><div class="mbar-fill" style="width:'+(pn*100)+'%;background:'+pc+'"></div></div><div style="font-size:9px;color:'+bc+'">BER '+bstr+'</div><div style="font-size:9px;color:'+oc+'">OSNR '+d.osnr.toFixed(1)+'</div>';
     grid.appendChild(c)}}
 
 // ═══════════════════════════════════════════════════════════════════
